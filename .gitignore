@@ -1,0 +1,14 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.pyc
+
+# Local data (personal job-tracker data)
+*.db
+backend/backups/
+
+# Env / OS
+.env
+.env.*
+.DS_Store
