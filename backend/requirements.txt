@@ -2,3 +2,5 @@ fastapi
 uvicorn[standard]
 sqlalchemy
 pydantic
+argon2-cffi
+psycopg[binary]

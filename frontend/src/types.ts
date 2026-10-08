@@ -50,3 +50,8 @@ export type ApplicationInput = Omit<
   Application,
   'id' | 'created_at' | 'updated_at' | 'contacts'
 >
+
+export interface User {
+  id: number
+  email: string
+}

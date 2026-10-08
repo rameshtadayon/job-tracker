@@ -69,3 +69,15 @@ class ApplicationOut(ApplicationBase):
     created_at: datetime
     updated_at: datetime
     contacts: list[ContactOut] = []
+
+
+class LoginRequest(BaseModel):
+    email: str
+    password: str
+
+
+class UserOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    email: str

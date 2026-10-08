@@ -1,0 +1,17 @@
+app = "job-tracker-rameshtadayon"
+primary_region = "sjc"
+
+[build]
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  # Sleep when idle to keep costs near zero; the first request after a pause takes a few seconds.
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1

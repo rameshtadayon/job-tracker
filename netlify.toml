@@ -1,0 +1,17 @@
+[build]
+  base = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+# Forward API calls to the Fly backend, so the browser sees one site and the login cookie works.
+[[redirects]]
+  from = "/api/*"
+  to = "https://job-tracker-rameshtadayon.fly.dev/api/:splat"
+  status = 200
+  force = true
+
+# Let React Router handle every other path (e.g. /applications/5 on refresh).
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

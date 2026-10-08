@@ -458,3 +458,34 @@ textarea {
   flex-direction: column;
   gap: 0.6rem;
 }
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  padding-top: 15vh;
+}
+
+.login-form {
+  width: 100%;
+  max-width: 380px;
+}
+
+.login-form .form-actions button {
+  flex: 1;
+}
+
+.session-bar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.75rem;
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 0;
+  font-size: 0.85rem;
+  color: var(--sub-ink);
+}
+
+.session-bar button {
+  padding: 0.3rem 0.9rem;
+}

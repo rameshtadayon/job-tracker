@@ -20,6 +20,11 @@ class Application(Base):
     __tablename__ = "applications"
 
     id = Column(Integer, primary_key=True, index=True)
+    # NULL = not yet claimed by any account (e.g. rows migrated from the old SQLite DB).
+    # SET NULL rather than CASCADE so deleting a user never deletes job data.
+    user_id = Column(
+        Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True, index=True
+    )
     company = Column(String, nullable=False)
     role = Column(String, nullable=False)
     status = Column(Enum(ApplicationStatus), nullable=False, default=ApplicationStatus.SAVED)
@@ -55,3 +60,25 @@ class Contact(Base):
     created_at = Column(DateTime, server_default=func.now())
 
     application = relationship("Application", back_populates="contacts")
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, nullable=False, unique=True, index=True)
+    password_hash = Column(String, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+
+
+class UserSession(Base):
+    __tablename__ = "sessions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    # SHA-256 of the cookie token, so a leaked DB doesn't leak live sessions.
+    token_hash = Column(String, nullable=False, unique=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
+    expires_at = Column(DateTime, nullable=False)
+    created_at = Column(DateTime, server_default=func.now())
+
+    user = relationship("User")

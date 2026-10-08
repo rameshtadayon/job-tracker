@@ -1,8 +1,13 @@
-import type { Application, ApplicationInput, Contact, ContactInput } from './types'
+import type { Application, ApplicationInput, Contact, ContactInput, User } from './types'
 
-const API_BASE = 'http://localhost:8000/api'
+// Same origin as the page: Vite proxies /api in dev, FastAPI serves the build in production.
+const API_BASE = '/api'
+
+// Fired when the session is missing or expired; App listens and shows the login page.
+export const UNAUTHORIZED_EVENT = 'jt:unauthorized'
 
 async function handle<T>(res: Response): Promise<T> {
+  if (res.status === 401) window.dispatchEvent(new Event(UNAUTHORIZED_EVENT))
   if (!res.ok) {
     const body = await res.text()
     throw new Error(`Request failed (${res.status}): ${body}`)
@@ -12,6 +17,19 @@ async function handle<T>(res: Response): Promise<T> {
 }
 
 export const api = {
+  auth: {
+    me: () => fetch(`${API_BASE}/auth/me`).then((r) => handle<User>(r)),
+
+    login: (email: string, password: string) =>
+      fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      }).then((r) => handle<User>(r)),
+
+    logout: () => fetch(`${API_BASE}/auth/logout`, { method: 'POST' }).then((r) => handle<void>(r)),
+  },
+
   list: () => fetch(`${API_BASE}/applications`).then((r) => handle<Application[]>(r)),
 
   get: (id: number) => fetch(`${API_BASE}/applications/${id}`).then((r) => handle<Application>(r)),
